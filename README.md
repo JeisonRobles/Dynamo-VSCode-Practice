@@ -1,14 +1,15 @@
-# 🚀 DynamoDB VSCode Practice — Python + boto3 + IAM + Streams + Lambda + CloudWatch Logs
+
+# 🚀 DynamoDB VSCode Practice  
+### Python + boto3 + IAM + Streams + Lambda + CloudWatch Logs
 
 A hands-on AWS DynamoDB project built locally using **VSCode**, **Python**, **boto3**, and **IAM credentials**.
-Adding a web interface check with CloudWatch Logs to see changes on the table.
 
 This project demonstrates how to:
 
 - Connect to AWS DynamoDB from a local machine
 - Create a table programmatically
 - Perform full CRUD operations
-
+- Monitor changes using Lambda + CloudWatch Logs
 
 ---
 
@@ -27,27 +28,37 @@ This project was created to deeply understand:
 
 ## 🏗 Architecture
 
+```
 Local Machine (VSCode)
-│
-│ boto3 SDK
-│
-▼
+        │
+        │ boto3 SDK
+        ▼
 AWS DynamoDB (Cloud)
+```
 
 Authentication:
+
 - IAM User (programmatic access)
 - Configured locally using `aws configure`
 - boto3 automatically reads credentials
 
+---
+
 ## 📂 Project Structure
+
+```
 dynamodb-vscode-practice/
 │
-├── create_table.py # Creates DynamoDB table
-├── app.py # Full CRUD operations
+├── create_table.py      # Creates DynamoDB table
+├── app.py               # Full CRUD operations
 ├── requirements.txt
 ├── .gitignore
+├── img/
+│   ├── Table.png
+│   ├── Lambda.png
+│   └── CloudWatchLog.png
 └── README.md
-
+```
 
 ---
 
@@ -55,17 +66,12 @@ dynamodb-vscode-practice/
 
 **Table Name:** `CustomerProducts`
 
-| Attribute      | Type | Key Type |
-|---------------|------|----------|
-| customer_id   | String | Partition Key (HASH) |
-| product_id    | String | Sort Key (RANGE) |
+| Attribute    | Type   | Key Type                  |
+|-------------|--------|---------------------------|
+| customer_id | String | Partition Key (HASH)      |
+| product_id  | String | Sort Key (RANGE)          |
 
-### Why this design?
-
-This models a **one-to-many relationship**:
-
-
-Example item:
+### Example Item
 
 ```json
 {
@@ -74,137 +80,113 @@ Example item:
   "product_type": "savings",
   "balance": 1500
 }
+```
 
-🔐 IAM Setup
+---
 
-Create IAM User
-Enable programmatic access
+## 🔐 IAM Setup
 
-Attach policy:
-AmazonDynamoDBFullAccess (for practice)
+1. Create IAM User  
+2. Enable programmatic access  
+3. Attach policy: `AmazonDynamoDBFullAccess` (for practice only)
 
 Run locally:
+
+```bash
 aws configure
+```
 
+---
 
-🛠 Installation
+## 🛠 Installation
 
-1️⃣ Create virtual environment
+### 1️⃣ Create virtual environment
+
+```bash
 python3 -m venv venv
 source venv/bin/activate
+```
 
-2️⃣ Install dependencies
+### 2️⃣ Install dependencies
+
+```bash
 pip install boto3
 pip freeze > requirements.txt
+```
 
-🏗 Create the Table
+---
+
+## 🏗 Create the Table
+
+```bash
 python create_table.py
+```
 
-Wait until the table becomes ACTIVE in AWS Console.
+Wait until the table becomes **ACTIVE** in AWS Console.
 
-🚀 Run the App (CRUD Demo)
+---
+
+## 🚀 Run the App (CRUD Demo)
+
+```bash
 python app.py
+```
 
-The script demonstrates:
+CRUD operations implemented:
 
--Create item
--Read (Query + GetItem)
--Update attributes
--Delete item
+- ✅ CREATE  
+- ✅ READ  
+- ✅ UPDATE  
+- ✅ DELETE  
 
+---
 
-🔄 CRUD Operations Implemented
--CREATE
--READ
--UPDATE
--DELETE
+## 🐍 What is boto3?
 
-🧠 Key DynamoDB Concepts Demonstrated
-Partition Key (HASH)
-
-Determines how data is distributed across partitions.
-Sort Key (RANGE)
-Allows multiple items under the same partition key.
-
-Query vs Scan
-
-Query → Efficient (uses partition key)
-Scan → Reads entire table (expensive)
-This project uses Query.
-
-PAY_PER_REQUEST
-
-Billing mode is set to:
-PAY_PER_REQUEST
-
-
-
-🐍 What is boto3?
-
-boto3 is the official AWS SDK for Python.
+`boto3` is the official AWS SDK for Python.
 
 It allows Python applications to:
--Authenticate with AWS
--Send signed API requests
--Interact with cloud services
--Two interfaces:
--client → Low-level API
--resource → High-level object abstraction (used here)
 
-🔒 Security Best Practices Followed
+- Authenticate with AWS  
+- Send signed API requests  
+- Interact with cloud services  
 
--No hardcoded credentials
--IAM authentication via aws configure
--Uses ConditionExpression to prevent unintended writes
--Principle of least privilege (recommended for production)
+Two interfaces:
 
-📚 Why This Project Matters
+- `client` → Low-level API  
+- `resource` → High-level abstraction (used here)
 
-This repository demonstrates practical understanding of:
+---
 
--AWS IAM
--NoSQL modeling
--Cloud authentication
--Python cloud integration
--Data engineering fundamentals
--It serves as a foundational step toward:
--AWS Data Engineering certification
--Serverless architectures (Lambda + DynamoDB)
--Replacing local SQLite with cloud storage
--Building scalable agent systems backed by DynamoDB
+## 🔒 Security Best Practices
 
-🔮 Possible Extensions
+- No hardcoded credentials  
+- IAM authentication via `aws configure`  
+- Uses `ConditionExpression` to prevent unintended writes  
+- Principle of least privilege (recommended for production)
 
-Add CLI interface
+---
 
-Add pagination handling
+## 📸 Screenshots
 
-Add Global Secondary Index (GSI)
+### DynamoDB Table Created
 
-Replace IAM User with IAM Role
+<img src="img/Table.png" width="700">
 
-Deploy via AWS Lambda
+---
 
-Integrate with FastAPI backend
+### Lambda Trigger
 
-Add logging & error handling layer
+<img src="img/Lambda.png" width="700">
 
-👨‍💻 Author
+---
 
-Built as part of hands-on AWS Data Engineering practice.
+### CloudWatch Logs
 
-📌 License
+<img src="img/CloudWatchLog.png" width="700">
+
+---
+
+## 📌 License
 
 MIT
-
-
-# Table Created:
-
-![Table](img/Table.png)
-
-# Lambda:
-
-![Lambda](img/Lambda.png)
-
-#  CloudWatch
-![CloudWatch](img/CloudWatchLog.png)
